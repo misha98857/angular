@@ -6,23 +6,22 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-
-import {CompilerFacade, CoreEnvironment, ExportedCompilerFacade, InputMap, InputTransformFunction, OpaqueValue, R3ComponentMetadataFacade, R3DeclareComponentFacade, R3DeclareDependencyMetadataFacade, R3DeclareDirectiveDependencyFacade, R3DeclareDirectiveFacade, R3DeclareFactoryFacade, R3DeclareInjectableFacade, R3DeclareInjectorFacade, R3DeclareNgModuleFacade, R3DeclarePipeDependencyFacade, R3DeclarePipeFacade, R3DeclareQueryMetadataFacade, R3DependencyMetadataFacade, R3DirectiveMetadataFacade, R3FactoryDefMetadataFacade, R3InjectableMetadataFacade, R3InjectorMetadataFacade, R3NgModuleMetadataFacade, R3PipeMetadataFacade, R3QueryMetadataFacade, R3TemplateDependencyFacade} from './compiler_facade_interface';
+import {CompilerFacade, CoreEnvironment, ExportedCompilerFacade, InputMap, InputTransformFunction, OpaqueValue, R3ComponentMetadataFacade, R3DeclareComponentFacade, R3DeclareDependencyMetadataFacade, R3DeclareDirectiveDependencyFacade, R3DeclareDirectiveFacade, R3DeclareFactoryFacade, R3DeclareInjectableFacade, R3DeclareInjectorFacade, R3DeclareNgModuleFacade, R3DeclarePipeDependencyFacade, R3DeclarePipeFacade, R3DeclareQueryMetadataFacade, R3DependencyMetadataFacade, R3DirectiveMetadataFacade, R3FactoryDefMetadataFacade, R3InjectableMetadataFacade, R3InjectorMetadataFacade, R3NgModuleMetadataFacade, R3PipeMetadataFacade, R3QueryMetadataFacade, R3TemplateDependencyFacade,} from './compiler_facade_interface';
 import {ConstantPool} from './constant_pool';
-import {ChangeDetectionStrategy, HostBinding, HostListener, Input, Output, ViewEncapsulation} from './core';
+import {ChangeDetectionStrategy, HostBinding, HostListener, Input, Output, ViewEncapsulation,} from './core';
 import {compileInjectable} from './injectable_compiler_2';
 import {DEFAULT_INTERPOLATION_CONFIG, InterpolationConfig} from './ml_parser/interpolation_config';
-import {DeclareVarStmt, Expression, literal, LiteralExpr, Statement, StmtModifier, WrappedNodeExpr} from './output/output_ast';
+import {DeclareVarStmt, Expression, literal, LiteralExpr, Statement, StmtModifier, WrappedNodeExpr,} from './output/output_ast';
 import {JitEvaluator} from './output/output_jit';
 import {ParseError, ParseSourceSpan, r3JitTypeSourceSpan} from './parse_util';
 import {compileFactoryFunction, FactoryTarget, R3DependencyMetadata} from './render3/r3_factory';
 import {compileInjector, R3InjectorMetadata} from './render3/r3_injector_compiler';
 import {R3JitReflector} from './render3/r3_jit';
-import {compileNgModule, compileNgModuleDeclarationExpression, R3NgModuleMetadata, R3NgModuleMetadataKind, R3SelectorScopeMode} from './render3/r3_module_compiler';
+import {compileNgModule, compileNgModuleDeclarationExpression, R3NgModuleMetadata, R3NgModuleMetadataKind, R3SelectorScopeMode,} from './render3/r3_module_compiler';
 import {compilePipeFromMetadata, R3PipeMetadata} from './render3/r3_pipe_compiler';
-import {createMayBeForwardRefExpression, ForwardRefHandling, getSafePropertyAccessString, MaybeForwardRefExpression, wrapReference} from './render3/util';
-import {DeclarationListEmitMode, R3ComponentMetadata, R3DirectiveDependencyMetadata, R3DirectiveMetadata, R3HostDirectiveMetadata, R3HostMetadata, R3PipeDependencyMetadata, R3QueryMetadata, R3TemplateDependency, R3TemplateDependencyKind, R3TemplateDependencyMetadata} from './render3/view/api';
-import {compileComponentFromMetadata, compileDirectiveFromMetadata, ParsedHostBindings, parseHostBindings, verifyHostBindings} from './render3/view/compiler';
+import {createMayBeForwardRefExpression, ForwardRefHandling, getSafePropertyAccessString, MaybeForwardRefExpression, wrapReference,} from './render3/util';
+import {DeclarationListEmitMode, R3ComponentMetadata, R3DirectiveDependencyMetadata, R3DirectiveMetadata, R3HostDirectiveMetadata, R3HostMetadata, R3PipeDependencyMetadata, R3QueryMetadata, R3TemplateDependency, R3TemplateDependencyKind, R3TemplateDependencyMetadata,} from './render3/view/api';
+import {compileComponentFromMetadata, compileDirectiveFromMetadata, ParsedHostBindings, parseHostBindings, verifyHostBindings,} from './render3/view/compiler';
 import {makeBindingParser, parseTemplate} from './render3/view/template';
 import {ResourceLoader} from './resource_loader';
 import {DomElementSchemaRegistry} from './schema/dom_element_schema_registry';
@@ -41,8 +40,11 @@ export class CompilerFacadeImpl implements CompilerFacade {
 
   constructor(private jitEvaluator = new JitEvaluator()) {}
 
-  compilePipe(angularCoreEnv: CoreEnvironment, sourceMapUrl: string, facade: R3PipeMetadataFacade):
-      any {
+  compilePipe(
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3PipeMetadataFacade,
+      ): any {
     const metadata: R3PipeMetadata = {
       name: facade.name,
       type: wrapReference(facade.type),
@@ -57,16 +59,20 @@ export class CompilerFacadeImpl implements CompilerFacade {
   }
 
   compilePipeDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      declaration: R3DeclarePipeFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      declaration: R3DeclarePipeFacade,
+      ): any {
     const meta = convertDeclarePipeFacadeToMetadata(declaration);
     const res = compilePipeFromMetadata(meta);
     return this.jitExpression(res.expression, angularCoreEnv, sourceMapUrl, []);
   }
 
   compileInjectable(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3InjectableMetadataFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3InjectableMetadataFacade,
+      ): any {
     const {expression, statements} = compileInjectable(
         {
           name: facade.name,
@@ -79,14 +85,17 @@ export class CompilerFacadeImpl implements CompilerFacade {
           useExisting: convertToProviderExpression(facade, 'useExisting'),
           deps: facade.deps?.map(convertR3DependencyMetadata),
         },
-        /* resolveForwardRefs */ true);
+        /* resolveForwardRefs */ true,
+    );
 
     return this.jitExpression(expression, angularCoreEnv, sourceMapUrl, statements);
   }
 
   compileInjectableDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3DeclareInjectableFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3DeclareInjectableFacade,
+      ): any {
     const {expression, statements} = compileInjectable(
         {
           name: facade.type.name,
@@ -99,37 +108,44 @@ export class CompilerFacadeImpl implements CompilerFacade {
           useExisting: convertToProviderExpression(facade, 'useExisting'),
           deps: facade.deps?.map(convertR3DeclareDependencyMetadata),
         },
-        /* resolveForwardRefs */ true);
+        /* resolveForwardRefs */ true,
+    );
 
     return this.jitExpression(expression, angularCoreEnv, sourceMapUrl, statements);
   }
 
   compileInjector(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3InjectorMetadataFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3InjectorMetadataFacade,
+      ): any {
     const meta: R3InjectorMetadata = {
       name: facade.name,
       type: wrapReference(facade.type),
       providers: facade.providers && facade.providers.length > 0 ?
           new WrappedNodeExpr(facade.providers) :
           null,
-      imports: facade.imports.map(i => new WrappedNodeExpr(i)),
+      imports: facade.imports.map((i) => new WrappedNodeExpr(i)),
     };
     const res = compileInjector(meta);
     return this.jitExpression(res.expression, angularCoreEnv, sourceMapUrl, []);
   }
 
   compileInjectorDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      declaration: R3DeclareInjectorFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      declaration: R3DeclareInjectorFacade,
+      ): any {
     const meta = convertDeclareInjectorFacadeToMetadata(declaration);
     const res = compileInjector(meta);
     return this.jitExpression(res.expression, angularCoreEnv, sourceMapUrl, []);
   }
 
   compileNgModule(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3NgModuleMetadataFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3NgModuleMetadataFacade,
+      ): any {
     const meta: R3NgModuleMetadata = {
       kind: R3NgModuleMetadataKind.Global,
       type: wrapReference(facade.type),
@@ -149,44 +165,66 @@ export class CompilerFacadeImpl implements CompilerFacade {
   }
 
   compileNgModuleDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      declaration: R3DeclareNgModuleFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      declaration: R3DeclareNgModuleFacade,
+      ): any {
     const expression = compileNgModuleDeclarationExpression(declaration);
     return this.jitExpression(expression, angularCoreEnv, sourceMapUrl, []);
   }
 
   compileDirective(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3DirectiveMetadataFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3DirectiveMetadataFacade,
+      ): any {
     const meta: R3DirectiveMetadata = convertDirectiveFacadeToMetadata(facade);
     return this.compileDirectiveFromMeta(angularCoreEnv, sourceMapUrl, meta);
   }
 
   compileDirectiveDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      declaration: R3DeclareDirectiveFacade): any {
-    const typeSourceSpan =
-        this.createParseSourceSpan('Directive', declaration.type.name, sourceMapUrl);
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      declaration: R3DeclareDirectiveFacade,
+      ): any {
+    const typeSourceSpan = this.createParseSourceSpan(
+        'Directive',
+        declaration.type.name,
+        sourceMapUrl,
+    );
     const meta = convertDeclareDirectiveFacadeToMetadata(declaration, typeSourceSpan);
     return this.compileDirectiveFromMeta(angularCoreEnv, sourceMapUrl, meta);
   }
 
   private compileDirectiveFromMeta(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string, meta: R3DirectiveMetadata): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      meta: R3DirectiveMetadata,
+      ): any {
     const constantPool = new ConstantPool();
     const bindingParser = makeBindingParser();
     const res = compileDirectiveFromMetadata(meta, constantPool, bindingParser);
     return this.jitExpression(
-        res.expression, angularCoreEnv, sourceMapUrl, constantPool.statements);
+        res.expression,
+        angularCoreEnv,
+        sourceMapUrl,
+        constantPool.statements,
+    );
   }
 
   compileComponent(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      facade: R3ComponentMetadataFacade): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      facade: R3ComponentMetadataFacade,
+      ): any {
     // Parse the template and check for errors.
     const {template, interpolation} = parseJitTemplate(
-        facade.template, facade.name, sourceMapUrl, facade.preserveWhitespaces,
-        facade.interpolation);
+        facade.template,
+        facade.name,
+        sourceMapUrl,
+        facade.preserveWhitespaces,
+        facade.interpolation,
+    );
 
     // Compile the component metadata, including template, into an expression.
     const meta: R3ComponentMetadata<R3TemplateDependency> = {
@@ -217,26 +255,40 @@ export class CompilerFacadeImpl implements CompilerFacade {
   }
 
   compileComponentDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      declaration: R3DeclareComponentFacade): any {
-    const typeSourceSpan =
-        this.createParseSourceSpan('Component', declaration.type.name, sourceMapUrl);
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      declaration: R3DeclareComponentFacade,
+      ): any {
+    const typeSourceSpan = this.createParseSourceSpan(
+        'Component',
+        declaration.type.name,
+        sourceMapUrl,
+    );
     const meta = convertDeclareComponentFacadeToMetadata(declaration, typeSourceSpan, sourceMapUrl);
     return this.compileComponentFromMeta(angularCoreEnv, sourceMapUrl, meta);
   }
 
   private compileComponentFromMeta(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string,
-      meta: R3ComponentMetadata<R3TemplateDependency>): any {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      meta: R3ComponentMetadata<R3TemplateDependency>,
+      ): any {
     const constantPool = new ConstantPool();
     const bindingParser = makeBindingParser(meta.interpolation);
     const res = compileComponentFromMetadata(meta, constantPool, bindingParser);
     return this.jitExpression(
-        res.expression, angularCoreEnv, sourceMapUrl, constantPool.statements);
+        res.expression,
+        angularCoreEnv,
+        sourceMapUrl,
+        constantPool.statements,
+    );
   }
 
   compileFactory(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string, meta: R3FactoryDefMetadataFacade) {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      meta: R3FactoryDefMetadataFacade,
+  ) {
     const factoryRes = compileFactoryFunction({
       name: meta.name,
       type: wrapReference(meta.type),
@@ -245,11 +297,18 @@ export class CompilerFacadeImpl implements CompilerFacade {
       target: meta.target,
     });
     return this.jitExpression(
-        factoryRes.expression, angularCoreEnv, sourceMapUrl, factoryRes.statements);
+        factoryRes.expression,
+        angularCoreEnv,
+        sourceMapUrl,
+        factoryRes.statements,
+    );
   }
 
   compileFactoryDeclaration(
-      angularCoreEnv: CoreEnvironment, sourceMapUrl: string, meta: R3DeclareFactoryFacade) {
+      angularCoreEnv: CoreEnvironment,
+      sourceMapUrl: string,
+      meta: R3DeclareFactoryFacade,
+  ) {
     const factoryRes = compileFactoryFunction({
       name: meta.type.name,
       type: wrapReference(meta.type),
@@ -259,9 +318,12 @@ export class CompilerFacadeImpl implements CompilerFacade {
       target: meta.target,
     });
     return this.jitExpression(
-        factoryRes.expression, angularCoreEnv, sourceMapUrl, factoryRes.statements);
+        factoryRes.expression,
+        angularCoreEnv,
+        sourceMapUrl,
+        factoryRes.statements,
+    );
   }
-
 
   createParseSourceSpan(kind: string, typeName: string, sourceUrl: string): ParseSourceSpan {
     return r3JitTypeSourceSpan(kind, typeName, sourceUrl);
@@ -277,8 +339,11 @@ export class CompilerFacadeImpl implements CompilerFacade {
    * @param preStatements a collection of statements that should be evaluated before the expression.
    */
   private jitExpression(
-      def: Expression, context: {[key: string]: any}, sourceUrl: string,
-      preStatements: Statement[]): any {
+      def: Expression,
+      context: {[key: string]: any},
+      sourceUrl: string,
+      preStatements: Statement[],
+      ): any {
     // The ConstantPool may contain Statements which declare variables used in the final expression.
     // Therefore, its statements need to precede the actual JIT operation. The final statement is a
     // declaration of $def which is set to the expression being compiled.
@@ -288,7 +353,11 @@ export class CompilerFacadeImpl implements CompilerFacade {
     ];
 
     const res = this.jitEvaluator.evaluateStatements(
-        sourceUrl, statements, new R3JitReflector(context), /* enableSourceMaps */ true);
+        sourceUrl,
+        statements,
+        new R3JitReflector(context),
+        /* enableSourceMaps */ true,
+    );
     return res['$def'];
   }
 }
@@ -303,8 +372,9 @@ function convertToR3QueryMetadata(facade: R3QueryMetadataFacade): R3QueryMetadat
   };
 }
 
-function convertQueryDeclarationToMetadata(declaration: R3DeclareQueryMetadataFacade):
-    R3QueryMetadata {
+function convertQueryDeclarationToMetadata(
+    declaration: R3DeclareQueryMetadataFacade,
+    ): R3QueryMetadata {
   return {
     propertyName: declaration.propertyName,
     first: declaration.first ?? false,
@@ -316,12 +386,12 @@ function convertQueryDeclarationToMetadata(declaration: R3DeclareQueryMetadataFa
   };
 }
 
-function convertQueryPredicate(predicate: OpaqueValue|string[]): MaybeForwardRefExpression|
-    string[] {
-  return Array.isArray(predicate) ?
-      // The predicate is an array of strings so pass it through.
-      predicate :
-      // The predicate is a type - assume that we will need to unwrap any `forwardRef()` calls.
+function convertQueryPredicate(
+    predicate: OpaqueValue|string[],
+    ): MaybeForwardRefExpression|string[] {
+  return Array.isArray(predicate) ?  // The predicate is an array of strings so pass it through.
+      predicate :  // The predicate is a type - assume that we will need to unwrap any
+                     // `forwardRef()` calls.
       createMayBeForwardRefExpression(new WrappedNodeExpr(predicate), ForwardRefHandling.Wrapped);
 }
 
@@ -333,13 +403,18 @@ function convertDirectiveFacadeToMetadata(facade: R3DirectiveMetadataFacade): R3
   const outputsFromType: Record<string, string> = {};
   for (const field in propMetadata) {
     if (propMetadata.hasOwnProperty(field)) {
-      propMetadata[field].forEach(ann => {
+      propMetadata[field].forEach((ann) => {
         if (isInput(ann)) {
+          const transformFunction = ann.transform ? [new WrappedNodeExpr(ann.transform)] : null;
+          const transformFunctions = Array.isArray(ann.transform) ?
+              ann.transform.map(
+                  (transformFunction: any) => new WrappedNodeExpr(transformFunction)) :
+              null;
           inputsFromType[field] = {
             bindingPropertyName: ann.alias || field,
             classPropertyName: field,
             required: ann.required || false,
-            transformFunction: ann.transform != null ? new WrappedNodeExpr(ann.transform) : null,
+            transformFunctions: transformFunction || transformFunctions || null,
           };
         } else if (isOutput(ann)) {
           outputsFromType[field] = ann.alias || field;
@@ -366,7 +441,9 @@ function convertDirectiveFacadeToMetadata(facade: R3DirectiveMetadataFacade): R3
 }
 
 function convertDeclareDirectiveFacadeToMetadata(
-    declaration: R3DeclareDirectiveFacade, typeSourceSpan: ParseSourceSpan): R3DirectiveMetadata {
+    declaration: R3DeclareDirectiveFacade,
+    typeSourceSpan: ParseSourceSpan,
+    ): R3DirectiveMetadata {
   return {
     name: declaration.type.name,
     type: wrapReference(declaration.type),
@@ -391,8 +468,9 @@ function convertDeclareDirectiveFacadeToMetadata(
   };
 }
 
-function convertHostDeclarationToMetadata(host: R3DeclareDirectiveFacade['host'] = {}):
-    R3HostMetadata {
+function convertHostDeclarationToMetadata(
+    host: R3DeclareDirectiveFacade['host'] = {},
+    ): R3HostMetadata {
   return {
     attributes: convertOpaqueValuesToExpressions(host.attributes ?? {}),
     listeners: host.listeners ?? {},
@@ -405,15 +483,16 @@ function convertHostDeclarationToMetadata(host: R3DeclareDirectiveFacade['host']
 }
 
 function convertHostDirectivesToMetadata(
-    metadata: R3DeclareDirectiveFacade|R3DirectiveMetadataFacade): R3HostDirectiveMetadata[]|null {
+    metadata: R3DeclareDirectiveFacade|R3DirectiveMetadataFacade,
+    ): R3HostDirectiveMetadata[]|null {
   if (metadata.hostDirectives?.length) {
-    return metadata.hostDirectives.map(hostDirective => {
+    return metadata.hostDirectives.map((hostDirective) => {
       return typeof hostDirective === 'function' ?
           {
             directive: wrapReference(hostDirective),
             inputs: null,
             outputs: null,
-            isForwardReference: false
+            isForwardReference: false,
           } :
           {
             directive: wrapReference(hostDirective.directive),
@@ -428,7 +507,7 @@ function convertHostDirectivesToMetadata(
 }
 
 function convertOpaqueValuesToExpressions(obj: {[key: string]: OpaqueValue}):
-    {[key: string]: WrappedNodeExpr<unknown>} {
+    {[key: string]: WrappedNodeExpr<unknown>;} {
   const result: {[key: string]: WrappedNodeExpr<unknown>} = {};
   for (const key of Object.keys(obj)) {
     result[key] = new WrappedNodeExpr(obj[key]);
@@ -437,11 +516,17 @@ function convertOpaqueValuesToExpressions(obj: {[key: string]: OpaqueValue}):
 }
 
 function convertDeclareComponentFacadeToMetadata(
-    decl: R3DeclareComponentFacade, typeSourceSpan: ParseSourceSpan,
-    sourceMapUrl: string): R3ComponentMetadata<R3TemplateDependencyMetadata> {
+    decl: R3DeclareComponentFacade,
+    typeSourceSpan: ParseSourceSpan,
+    sourceMapUrl: string,
+    ): R3ComponentMetadata<R3TemplateDependencyMetadata> {
   const {template, interpolation} = parseJitTemplate(
-      decl.template, decl.type.name, sourceMapUrl, decl.preserveWhitespaces ?? false,
-      decl.interpolation);
+      decl.template,
+      decl.type.name,
+      sourceMapUrl,
+      decl.preserveWhitespaces ?? false,
+      decl.interpolation,
+  );
 
   const declarations: R3TemplateDependencyMetadata[] = [];
   if (decl.dependencies) {
@@ -460,11 +545,15 @@ function convertDeclareComponentFacadeToMetadata(
     // Existing declarations on NPM may not be using the new `dependencies` merged field, and may
     // have separate fields for dependencies instead. Unify them for JIT compilation.
     decl.components &&
-        declarations.push(...decl.components.map(
-            dir => convertDirectiveDeclarationToMetadata(dir, /* isComponent */ true)));
+        declarations.push(
+            ...decl.components.map(
+                (dir) => convertDirectiveDeclarationToMetadata(dir, /* isComponent */ true),
+                ),
+        );
     decl.directives &&
         declarations.push(
-            ...decl.directives.map(dir => convertDirectiveDeclarationToMetadata(dir)));
+            ...decl.directives.map((dir) => convertDirectiveDeclarationToMetadata(dir)),
+        );
     decl.pipes && declarations.push(...convertPipeMapToMetadata(decl.pipes));
   }
 
@@ -491,8 +580,9 @@ function convertDeclareComponentFacadeToMetadata(
   };
 }
 
-function convertDeclarationFacadeToMetadata(declaration: R3TemplateDependencyFacade):
-    R3TemplateDependency {
+function convertDeclarationFacadeToMetadata(
+    declaration: R3TemplateDependencyFacade,
+    ): R3TemplateDependency {
   return {
     ...declaration,
     type: new WrappedNodeExpr(declaration.type),
@@ -501,7 +591,8 @@ function convertDeclarationFacadeToMetadata(declaration: R3TemplateDependencyFac
 
 function convertDirectiveDeclarationToMetadata(
     declaration: R3DeclareDirectiveDependencyFacade,
-    isComponent: true|null = null): R3DirectiveDependencyMetadata {
+    isComponent: true|null = null,
+    ): R3DirectiveDependencyMetadata {
   return {
     kind: R3TemplateDependencyKind.Directive,
     isComponent: isComponent || declaration.kind === 'component',
@@ -513,13 +604,14 @@ function convertDirectiveDeclarationToMetadata(
   };
 }
 
-function convertPipeMapToMetadata(pipes: R3DeclareComponentFacade['pipes']):
-    R3PipeDependencyMetadata[] {
+function convertPipeMapToMetadata(
+    pipes: R3DeclareComponentFacade['pipes'],
+    ): R3PipeDependencyMetadata[] {
   if (!pipes) {
     return [];
   }
 
-  return Object.keys(pipes).map(name => {
+  return Object.keys(pipes).map((name) => {
     return {
       kind: R3TemplateDependencyKind.Pipe,
       name,
@@ -528,8 +620,9 @@ function convertPipeMapToMetadata(pipes: R3DeclareComponentFacade['pipes']):
   });
 }
 
-function convertPipeDeclarationToMetadata(pipe: R3DeclarePipeDependencyFacade):
-    R3PipeDependencyMetadata {
+function convertPipeDeclarationToMetadata(
+    pipe: R3DeclarePipeDependencyFacade,
+    ): R3PipeDependencyMetadata {
   return {
     kind: R3TemplateDependencyKind.Pipe,
     name: pipe.name,
@@ -538,15 +631,22 @@ function convertPipeDeclarationToMetadata(pipe: R3DeclarePipeDependencyFacade):
 }
 
 function parseJitTemplate(
-    template: string, typeName: string, sourceMapUrl: string, preserveWhitespaces: boolean,
-    interpolation: [string, string]|undefined) {
+    template: string,
+    typeName: string,
+    sourceMapUrl: string,
+    preserveWhitespaces: boolean,
+    interpolation: [string, string]|undefined,
+) {
   const interpolationConfig =
       interpolation ? InterpolationConfig.fromArray(interpolation) : DEFAULT_INTERPOLATION_CONFIG;
   // Parse the template and check for errors.
-  const parsed = parseTemplate(
-      template, sourceMapUrl, {preserveWhitespaces, interpolationConfig, enabledBlockTypes});
+  const parsed = parseTemplate(template, sourceMapUrl, {
+    preserveWhitespaces,
+    interpolationConfig,
+    enabledBlockTypes,
+  });
   if (parsed.errors !== null) {
-    const errors = parsed.errors.map(err => err.toString()).join(', ');
+    const errors = parsed.errors.map((err) => err.toString()).join(', ');
     throw new Error(`Errors during JIT compilation of template for ${typeName}: ${errors}`);
   }
   return {template: parsed, interpolation: interpolationConfig};
@@ -560,11 +660,15 @@ function parseJitTemplate(
  * a `forwardRef()` - either by the application developer or during partial-compilation. Thus we can
  * use `ForwardRefHandling.None`.
  */
-function convertToProviderExpression(obj: any, property: string): MaybeForwardRefExpression|
-    undefined {
+function convertToProviderExpression(
+    obj: any,
+    property: string,
+    ): MaybeForwardRefExpression|undefined {
   if (obj.hasOwnProperty(property)) {
     return createMayBeForwardRefExpression(
-        new WrappedNodeExpr(obj[property]), ForwardRefHandling.None);
+        new WrappedNodeExpr(obj[property]),
+        ForwardRefHandling.None,
+    );
   } else {
     return undefined;
   }
@@ -578,15 +682,18 @@ function wrapExpression(obj: any, property: string): WrappedNodeExpr<any>|undefi
   }
 }
 
-function computeProvidedIn(providedIn: Function|string|null|undefined): MaybeForwardRefExpression {
+function computeProvidedIn(
+    providedIn: Function|string|null|undefined,
+    ): MaybeForwardRefExpression {
   const expression = typeof providedIn === 'function' ? new WrappedNodeExpr(providedIn) :
                                                         new LiteralExpr(providedIn ?? null);
   // See `convertToProviderExpression()` for why this uses `ForwardRefHandling.None`.
   return createMayBeForwardRefExpression(expression, ForwardRefHandling.None);
 }
 
-function convertR3DependencyMetadataArray(facades: R3DependencyMetadataFacade[]|null|
-                                          undefined): R3DependencyMetadata[]|null {
+function convertR3DependencyMetadataArray(
+    facades: R3DependencyMetadataFacade[]|null|undefined,
+    ): R3DependencyMetadata[]|null {
   return facades == null ? null : facades.map(convertR3DependencyMetadata);
 }
 
@@ -597,21 +704,38 @@ function convertR3DependencyMetadata(facade: R3DependencyMetadataFacade): R3Depe
   // `attribute` rather than the `token`.
   const token = isAttributeDep ? new WrappedNodeExpr(facade.attribute) : rawToken;
   return createR3DependencyMetadata(
-      token, isAttributeDep, facade.host, facade.optional, facade.self, facade.skipSelf);
+      token,
+      isAttributeDep,
+      facade.host,
+      facade.optional,
+      facade.self,
+      facade.skipSelf,
+  );
 }
 
-function convertR3DeclareDependencyMetadata(facade: R3DeclareDependencyMetadataFacade):
-    R3DependencyMetadata {
+function convertR3DeclareDependencyMetadata(
+    facade: R3DeclareDependencyMetadataFacade,
+    ): R3DependencyMetadata {
   const isAttributeDep = facade.attribute ?? false;
   const token = facade.token === null ? null : new WrappedNodeExpr(facade.token);
   return createR3DependencyMetadata(
-      token, isAttributeDep, facade.host ?? false, facade.optional ?? false, facade.self ?? false,
-      facade.skipSelf ?? false);
+      token,
+      isAttributeDep,
+      facade.host ?? false,
+      facade.optional ?? false,
+      facade.self ?? false,
+      facade.skipSelf ?? false,
+  );
 }
 
 function createR3DependencyMetadata(
-    token: WrappedNodeExpr<unknown>|null, isAttributeDep: boolean, host: boolean, optional: boolean,
-    self: boolean, skipSelf: boolean): R3DependencyMetadata {
+    token: WrappedNodeExpr<unknown>|null,
+    isAttributeDep: boolean,
+    host: boolean,
+    optional: boolean,
+    self: boolean,
+    skipSelf: boolean,
+    ): R3DependencyMetadata {
   // If the dep is an `@Attribute()` the `attributeNameType` ought to be the `unknown` type.
   // But types are not available at runtime so we just use a literal `"<unknown>"` string as a dummy
   // marker.
@@ -620,8 +744,10 @@ function createR3DependencyMetadata(
 }
 
 function extractHostBindings(
-    propMetadata: {[key: string]: any[]}, sourceSpan: ParseSourceSpan,
-    host?: {[key: string]: string}): ParsedHostBindings {
+    propMetadata: {[key: string]: any[]},
+    sourceSpan: ParseSourceSpan,
+    host?: {[key: string]: string},
+    ): ParsedHostBindings {
   // First parse the declarations from the metadata.
   const bindings = parseHostBindings(host || {});
 
@@ -634,13 +760,15 @@ function extractHostBindings(
   // Next, loop over the properties of the object, looking for @HostBinding and @HostListener.
   for (const field in propMetadata) {
     if (propMetadata.hasOwnProperty(field)) {
-      propMetadata[field].forEach(ann => {
+      propMetadata[field].forEach((ann) => {
         if (isHostBinding(ann)) {
           // Since this is a decorator, we know that the value is a class member. Always access it
           // through `this` so that further down the line it can't be confused for a literal value
           // (e.g. if there's a property called `true`).
-          bindings.properties[ann.hostPropertyName || field] =
-              getSafePropertyAccessString('this', field);
+          bindings.properties[ann.hostPropertyName || field] = getSafePropertyAccessString(
+              'this',
+              field,
+          );
         } else if (isHostListener(ann)) {
           bindings.listeners[ann.eventName || field] = `${field}(${(ann.args || []).join(',')})`;
         }
@@ -659,7 +787,6 @@ function isHostListener(value: any): value is HostListener {
   return value.ngMetadataName === 'HostListener';
 }
 
-
 function isInput(value: any): value is Input {
   return value.ngMetadataName === 'Input';
 }
@@ -668,22 +795,28 @@ function isOutput(value: any): value is Output {
   return value.ngMetadataName === 'Output';
 }
 
-function inputsMappingToInputMetadata(inputs: Record<string, string|[string, string, InputTransformFunction?]>) {
+function inputsMappingToInputMetadata(
+  inputs: Record<string, string | [string, string, InputTransformFunction?]>,
+) {
   return Object.keys(inputs).reduce<InputMap>((result, key) => {
     const value = inputs[key];
+    const transformFunction = value[2] ? [new WrappedNodeExpr(value[2])] : null;
+    const transformFunctions = Array.isArray(value[2]) ?
+        value[2].map((transformFunction: any) => new WrappedNodeExpr(transformFunction)) :
+        null;
 
     if (typeof value === 'string') {
       result[key] = {
         bindingPropertyName: value,
         classPropertyName: value,
-        transformFunction: null,
+        transformFunctions: null,
         required: false,
       };
     } else {
       result[key] = {
         bindingPropertyName: value[0],
         classPropertyName: value[1],
-        transformFunction: value[2] ? new WrappedNodeExpr(value[2]) : null,
+        transformFunctions: transformFunction || transformFunctions || null,
         required: false,
       };
     }
@@ -693,7 +826,13 @@ function inputsMappingToInputMetadata(inputs: Record<string, string|[string, str
 }
 
 function parseInputsArray(
-    values: (string|{name: string, alias?: string, required?: boolean, transform?: Function})[]) {
+    values: (string|{
+      name: string;
+      alias?: string;
+      required?: boolean;
+      transform?: Function
+    })[],
+) {
   return values.reduce<InputMap>((results, value) => {
     if (typeof value === 'string') {
       const [bindingPropertyName, classPropertyName] = parseMappingString(value);
@@ -701,14 +840,19 @@ function parseInputsArray(
         bindingPropertyName,
         classPropertyName,
         required: false,
-        transformFunction: null,
+        transformFunctions: null,
       };
     } else {
+      const transformFunction = value.transform ? [new WrappedNodeExpr(value.transform)] : null;
+      const transformFunctions = Array.isArray(value.transform) ?
+          value.transform.map((transformFunction: any) => new WrappedNodeExpr(transformFunction)) :
+          null;
+
       results[value.name] = {
         bindingPropertyName: value.alias || value.name,
         classPropertyName: value.name,
         required: value.required || false,
-        transformFunction: value.transform != null ? new WrappedNodeExpr(value.transform) : null,
+        transformFunctions: transformFunction || transformFunctions || null,
       };
     }
     return results;
@@ -726,7 +870,7 @@ function parseMappingStringArray(values: string[]): Record<string, string> {
 function parseMappingString(value: string): [alias: string, fieldName: string] {
   // Either the value is 'field' or 'field: property'. In the first case, `property` will
   // be undefined, in which case the field name should also be used as the property name.
-  const [fieldName, bindingPropertyName] = value.split(':', 2).map(str => str.trim());
+  const [fieldName, bindingPropertyName] = value.split(':', 2).map((str) => str.trim());
   return [bindingPropertyName ?? fieldName, fieldName];
 }
 
@@ -742,8 +886,9 @@ function convertDeclarePipeFacadeToMetadata(declaration: R3DeclarePipeFacade): R
   };
 }
 
-function convertDeclareInjectorFacadeToMetadata(declaration: R3DeclareInjectorFacade):
-    R3InjectorMetadata {
+function convertDeclareInjectorFacadeToMetadata(
+    declaration: R3DeclareInjectorFacade,
+    ): R3InjectorMetadata {
   return {
     name: declaration.type.name,
     type: wrapReference(declaration.type),
@@ -751,7 +896,7 @@ function convertDeclareInjectorFacadeToMetadata(declaration: R3DeclareInjectorFa
         new WrappedNodeExpr(declaration.providers) :
         null,
     imports: declaration.imports !== undefined ?
-        declaration.imports.map(i => new WrappedNodeExpr(i)) :
+        declaration.imports.map((i) => new WrappedNodeExpr(i)) :
         [],
   };
 }

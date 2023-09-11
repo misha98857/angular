@@ -569,7 +569,7 @@ export interface ReflectionHost {
    *
    * @returns a `FunctionDefinition` giving metadata about the function definition.
    */
-  getDefinitionOfFunction(fn: ts.Node): FunctionDefinition|null;
+  getDefinitionOfFunction(fn: ts.Node): FunctionDefinition[]|null;
 
   /**
    * Determine if an identifier was imported from another module and return `Import` metadata

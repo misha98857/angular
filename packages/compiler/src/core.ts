@@ -22,18 +22,18 @@ export enum ViewEncapsulation {
   Emulated = 0,
   // Historically the 1 value was for `Native` encapsulation which has been removed as of v11.
   None = 2,
-  ShadowDom = 3
+  ShadowDom = 3,
 }
 
 export enum ChangeDetectionStrategy {
   OnPush = 0,
-  Default = 1
+  Default = 1,
 }
 
 export interface Input {
   alias?: string;
   required?: boolean;
-  transform?: (value: any) => any;
+  transform?: (value: any) => any | ((value: any) => any)[];
 }
 
 export interface Output {
@@ -54,16 +54,17 @@ export interface SchemaMetadata {
 }
 
 export const CUSTOM_ELEMENTS_SCHEMA: SchemaMetadata = {
-  name: 'custom-elements'
+  name: 'custom-elements',
 };
 
 export const NO_ERRORS_SCHEMA: SchemaMetadata = {
-  name: 'no-errors-schema'
+  name: 'no-errors-schema',
 };
 
 export interface Type extends Function {
   new(...args: any[]): any;
 }
+
 export const Type = Function;
 
 export enum SecurityContext {
@@ -143,7 +144,10 @@ function parserSelectorToNegativeSelector(selector: CssSelector): R3CssSelector 
 
   if (selector.element) {
     return [
-      SelectorFlags.NOT | SelectorFlags.ELEMENT, selector.element, ...selector.attrs, ...classes
+      SelectorFlags.NOT | SelectorFlags.ELEMENT,
+      selector.element,
+      ...selector.attrs,
+      ...classes,
     ];
   } else if (selector.attrs.length) {
     return [SelectorFlags.NOT | SelectorFlags.ATTRIBUTE, ...selector.attrs, ...classes];
@@ -158,7 +162,7 @@ function parserSelectorToR3Selector(selector: CssSelector): R3CssSelector {
   const positive = parserSelectorToSimpleSelector(selector);
 
   const negative: R3CssSelectorList = selector.notSelectors && selector.notSelectors.length ?
-      selector.notSelectors.map(notSelector => parserSelectorToNegativeSelector(notSelector)) :
+      selector.notSelectors.map((notSelector) => parserSelectorToNegativeSelector(notSelector)) :
       [];
 
   return positive.concat(...negative);
@@ -182,7 +186,7 @@ export const enum RenderFlags {
   Create = 0b01,
 
   /* Whether to run the update block (e.g. refresh bindings) */
-  Update = 0b10
+  Update = 0b10,
 }
 
 // Pasted from render3/interfaces/node.ts

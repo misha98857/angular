@@ -18,7 +18,7 @@ import {initNgDevMode} from '../util/ng_dev_mode';
 import {stringify} from '../util/stringify';
 
 import {NG_COMP_DEF, NG_DIR_DEF, NG_MOD_DEF, NG_PIPE_DEF} from './fields';
-import {ComponentDef, ComponentDefFeature, ComponentTemplate, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefListOrFactory, HostBindingsFunction, InputTransformFunction, PipeDef, PipeDefListOrFactory, TypeOrFactory, ViewQueriesFunction} from './interfaces/definition';
+import {ComponentDef, ComponentDefFeature, ComponentTemplate, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefListOrFactory, HostBindingsFunction, InputTransformFunction, PipeDef, PipeDefListOrFactory, TypeOrFactory, ViewQueriesFunction,} from './interfaces/definition';
 import {TAttributes, TConstantsOrFactory} from './interfaces/node';
 import {CssSelectorList} from './interfaces/projection';
 import {stringifyCSSSelectorList} from './node_selector_matcher';
@@ -88,7 +88,9 @@ interface DirectiveDefinition<T> {
    *    this reason `NgOnChanges` will be deprecated and removed in future version and this
    *    API will be simplified to be consistent with `output`.
    */
-  inputs?: {[P in keyof T]?: string|[string, string, InputTransformFunction?]};
+  inputs?: {
+    [P in keyof T]?:|string|[string, string, (InputTransformFunction | InputTransformFunction[])?];
+  };
 
   /**
    * A map of output names.
@@ -302,8 +304,9 @@ interface ComponentDefinition<T> extends Omit<DirectiveDefinition<T>, 'features'
  * ```
  * @codeGenApi
  */
-export function ɵɵdefineComponent<T>(componentDefinition: ComponentDefinition<T>):
-    Mutable<ComponentDef<any>, keyof ComponentDef<any>> {
+export function ɵɵdefineComponent<T>(
+    componentDefinition: ComponentDefinition<T>,
+    ): Mutable<ComponentDef<any>, keyof ComponentDef<any>> {
   return noSideEffects(() => {
     // Initialize ngDevMode. This must be the first statement in ɵɵdefineComponent.
     // See the `initNgDevMode` docstring for more information.
@@ -320,7 +323,7 @@ export function ɵɵdefineComponent<T>(componentDefinition: ComponentDefinition<
       onPush: componentDefinition.changeDetection === ChangeDetectionStrategy.OnPush,
       directiveDefs: null!,  // assigned in noSideEffects
       pipeDefs: null!,       // assigned in noSideEffects
-      dependencies: baseDef.standalone && componentDefinition.dependencies || null,
+      dependencies: (baseDef.standalone && componentDefinition.dependencies) || null,
       getStandaloneInjector: null,
       signals: componentDefinition.signals ?? false,
       data: componentDefinition.data || {},
@@ -450,7 +453,8 @@ export function ɵɵdefineNgModule<T>(def: {
  */
 function invertObject<T>(
     obj?: {[P in keyof T]?: string|[string, string, ...unknown[]]},
-    secondary?: Record<string, string>): {[P in keyof T]: string} {
+    secondary?: Record<string, string>,
+    ): {[P in keyof T]: string} {
   if (obj == null) return EMPTY_OBJ as any;
   const newLookup: any = {};
   for (const minifiedKey in obj) {
@@ -463,7 +467,7 @@ function invertObject<T>(
       }
       newLookup[publicName] = minifiedKey;
       if (secondary) {
-        (secondary[publicName] = declaredName as string);
+        secondary[publicName] = declaredName as string;
       }
     }
   }
@@ -486,8 +490,9 @@ function invertObject<T>(
  *
  * @codeGenApi
  */
-export function ɵɵdefineDirective<T>(directiveDefinition: DirectiveDefinition<T>):
-    Mutable<DirectiveDef<any>, keyof DirectiveDef<any>> {
+export function ɵɵdefineDirective<T>(
+    directiveDefinition: DirectiveDefinition<T>,
+    ): Mutable<DirectiveDef<any>, keyof DirectiveDef<any>> {
   return noSideEffects(() => {
     const def = getNgDirectiveDef(directiveDefinition);
     initFeatures(def);
@@ -527,14 +532,14 @@ export function ɵɵdefinePipe<T>(pipeDef: {
    */
   standalone?: boolean;
 }): unknown {
-  return (<PipeDef<T>>{
+  return <PipeDef<T>>{
     type: pipeDef.type,
     name: pipeDef.name,
     factory: null,
     pure: pipeDef.pure !== false,
     standalone: pipeDef.standalone === true,
-    onDestroy: pipeDef.type.prototype.ngOnDestroy || null
-  });
+    onDestroy: pipeDef.type.prototype.ngOnDestroy || null,
+  };
 }
 
 /**
@@ -578,8 +583,9 @@ export function getNgModuleDef<T>(type: any, throwNotFound?: boolean): NgModuleD
   return ngModuleDef;
 }
 
-function getNgDirectiveDef<T>(directiveDefinition: DirectiveDefinition<T>):
-    Mutable<DirectiveDef<unknown>, keyof DirectiveDef<unknown>> {
+function getNgDirectiveDef<T>(
+    directiveDefinition: DirectiveDefinition<T>,
+    ): Mutable<DirectiveDef<unknown>, keyof DirectiveDef<unknown>> {
   const declaredInputs: Record<string, string> = {};
 
   return {
@@ -607,19 +613,25 @@ function getNgDirectiveDef<T>(directiveDefinition: DirectiveDefinition<T>):
   };
 }
 
-function initFeatures(definition:|Mutable<DirectiveDef<unknown>, keyof DirectiveDef<unknown>>|
-                      Mutable<ComponentDef<unknown>, keyof ComponentDef<unknown>>): void {
+function initFeatures(
+    definition:|Mutable<DirectiveDef<unknown>, keyof DirectiveDef<unknown>>|
+    Mutable<ComponentDef<unknown>, keyof ComponentDef<unknown>>,
+    ): void {
   definition.features?.forEach((fn) => fn(definition));
 }
 
 export function extractDefListOrFactory(
     dependencies: TypeOrFactory<DependencyTypeList>|undefined,
-    pipeDef: false): DirectiveDefListOrFactory|null;
+    pipeDef: false,
+    ): DirectiveDefListOrFactory|null;
 export function extractDefListOrFactory(
-    dependencies: TypeOrFactory<DependencyTypeList>|undefined, pipeDef: true): PipeDefListOrFactory|
-    null;
+    dependencies: TypeOrFactory<DependencyTypeList>|undefined,
+    pipeDef: true,
+    ): PipeDefListOrFactory|null;
 export function extractDefListOrFactory(
-    dependencies: TypeOrFactory<DependencyTypeList>|undefined, pipeDef: boolean): unknown {
+    dependencies: TypeOrFactory<DependencyTypeList>|undefined,
+    pipeDef: boolean,
+    ): unknown {
   if (!dependencies) {
     return null;
   }
@@ -627,7 +639,7 @@ export function extractDefListOrFactory(
   const defExtractor = pipeDef ? getPipeDef : extractDirectiveDef;
 
   return () => (typeof dependencies === 'function' ? dependencies() : dependencies)
-                   .map(dep => defExtractor(dep))
+                   .map((dep) => defExtractor(dep))
                    .filter(nonNull);
 }
 
@@ -675,7 +687,7 @@ function getComponentId(componentDef: ComponentDef<unknown>): string {
   ].join('|');
 
   for (const char of hashSelectors) {
-    hash = Math.imul(31, hash) + char.charCodeAt(0) << 0;
+    hash = (Math.imul(31, hash) + char.charCodeAt(0)) << 0;
   }
 
   // Force positive number hash.
@@ -688,13 +700,16 @@ function getComponentId(componentDef: ComponentDef<unknown>): string {
     if (GENERATED_COMP_IDS.has(compId)) {
       const previousCompDefType = GENERATED_COMP_IDS.get(compId)!;
       if (previousCompDefType !== componentDef.type) {
-        console.warn(formatRuntimeError(
-            RuntimeErrorCode.COMPONENT_ID_COLLISION,
-            `Component ID generation collision detected. Components '${
-                previousCompDefType.name}' and '${componentDef.type.name}' with selector '${
-                stringifyCSSSelectorList(
-                    componentDef
-                        .selectors)}' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID.`));
+        console.warn(
+            formatRuntimeError(
+                RuntimeErrorCode.COMPONENT_ID_COLLISION,
+                `Component ID generation collision detected. Components '${
+                    previousCompDefType.name}' and '${componentDef.type.name}' with selector '${
+                    stringifyCSSSelectorList(
+                        componentDef.selectors,
+                        )}' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID.`,
+                ),
+        );
       }
     } else {
       GENERATED_COMP_IDS.set(compId, componentDef.type);

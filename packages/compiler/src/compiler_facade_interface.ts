@@ -80,7 +80,7 @@ export type InputMap = {
     bindingPropertyName: string,
     classPropertyName: string,
     required: boolean,
-    transformFunction: InputTransformFunction,
+    transformFunctions: InputTransformFunction,
   };
 };
 
