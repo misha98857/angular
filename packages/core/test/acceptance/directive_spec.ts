@@ -7,7 +7,7 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {Component, Directive, ElementRef, EventEmitter, Input, NgModule, OnChanges, Output, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, Directive, ElementRef, EventEmitter, Input, NgModule, OnChanges, Output, SimpleChange, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef,} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
@@ -81,7 +81,8 @@ describe('directives', () => {
          TestBed.configureTestingModule({declarations: [TestComponent, TestDir]});
          TestBed.overrideTemplate(
              TestComponent,
-             `<span class="fade" [prop1]="true" [test]="false" [prop2]="true"></span>`);
+             `<span class="fade" [prop1]="true" [test]="false" [prop2]="true"></span>`,
+         );
 
          const fixture = TestBed.createComponent(TestComponent);
          const testDir = fixture.debugElement.query(By.directive(TestDir)).injector.get(TestDir);
@@ -105,7 +106,9 @@ describe('directives', () => {
       const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TestDirective));
 
       expect(nodesWithDirective.length).toBe(1);
-      expect(nodesWithDirective[0].injector.get(TestDirective).templateRef instanceof TemplateRef)
+      expect(
+          nodesWithDirective[0].injector.get(TestDirective).templateRef instanceof TemplateRef,
+          )
           .toBe(true);
     });
 
@@ -127,17 +130,18 @@ describe('directives', () => {
 
       @Component({
         selector: 'my-component',
-        template: `
-          <ng-container *ngIf="visible" directiveA>
-            <span>Some content</span>
-          </ng-container>`
+        template: ` <ng-container *ngIf="visible" directiveA>
+          <span>Some content</span>
+        </ng-container>`,
       })
       class MyComponent {
         visible = true;
       }
 
-      TestBed.configureTestingModule(
-          {declarations: [MyComponent, DirectiveA], imports: [CommonModule]});
+      TestBed.configureTestingModule({
+        declarations: [MyComponent, DirectiveA],
+        imports: [CommonModule],
+      });
       const fixture = TestBed.createComponent(MyComponent);
       fixture.detectChanges();
       const directiveA = fixture.debugElement.query(By.css('span')).injector.get(DirectiveA);
@@ -147,9 +151,12 @@ describe('directives', () => {
 
     it('should match directives on i18n-annotated attributes', () => {
       TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
-      TestBed.overrideTemplate(TestComponent, `
+      TestBed.overrideTemplate(
+          TestComponent,
+          `
         <div title="My title" i18n-title="Title translation description"></div>
-      `);
+      `,
+      );
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TitleDirective));
@@ -159,9 +166,12 @@ describe('directives', () => {
 
     it('should match a mix of bound directives and classes', () => {
       TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
-      TestBed.overrideTemplate(TestComponent, `
+      TestBed.overrideTemplate(
+          TestComponent,
+          `
         <div class="one two" [id]="someId" [title]="title"></div>
-      `);
+      `,
+      );
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TitleDirective));
@@ -175,22 +185,29 @@ describe('directives', () => {
       }
 
       TestBed.configureTestingModule({declarations: [TestComponent, TitleClassDirective]});
-      TestBed.overrideTemplate(TestComponent, `
+      TestBed.overrideTemplate(
+          TestComponent,
+          `
         <div class="titleDir" [id]="someId"></div>
-      `);
+      `,
+      );
 
       const fixture = TestBed.createComponent(TestComponent);
-      const nodesWithDirective =
-          fixture.debugElement.queryAllNodes(By.directive(TitleClassDirective));
+      const nodesWithDirective = fixture.debugElement.queryAllNodes(
+          By.directive(TitleClassDirective),
+      );
 
       expect(nodesWithDirective.length).toBe(1);
     });
 
     it('should NOT match classes to directive selectors', () => {
       TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
-      TestBed.overrideTemplate(TestComponent, `
+      TestBed.overrideTemplate(
+          TestComponent,
+          `
         <div class="title" [id]="someId"></div>
-      `);
+      `,
+      );
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TitleDirective));
@@ -204,13 +221,17 @@ describe('directives', () => {
       }
 
       TestBed.configureTestingModule({declarations: [TestComponent, TitleAttributeDirective]});
-      TestBed.overrideTemplate(TestComponent, `
+      TestBed.overrideTemplate(
+          TestComponent,
+          `
         <div title="titleDir" [id]="someId"></div>
-      `);
+      `,
+      );
 
       const fixture = TestBed.createComponent(TestComponent);
-      const nodesWithDirective =
-          fixture.debugElement.queryAllNodes(By.directive(TitleAttributeDirective));
+      const nodesWithDirective = fixture.debugElement.queryAllNodes(
+          By.directive(TitleAttributeDirective),
+      );
 
       expect(nodesWithDirective.length).toBe(1);
     });
@@ -245,7 +266,8 @@ describe('directives', () => {
 
       @Component({
         selector: `my-comp`,
-        template: `<p [attr.dir]="direction"></p><p dir="rtl"></p>`,
+        template: `<p [attr.dir]="direction"></p>
+          <p dir="rtl"></p>`,
       })
       class MyComp {
         direction = 'auto';
@@ -265,6 +287,7 @@ describe('directives', () => {
       @Directive({selector: 'svg[dir]'})
       class MyDir {
         constructor(private el: ElementRef) {}
+
         ngOnInit() {
           calls.push(`MyDir.ngOnInit: ${this.el.nativeElement.tagName}`);
         }
@@ -290,6 +313,7 @@ describe('directives', () => {
       @Directive({selector: 'text[dir]'})
       class MyDir {
         constructor(private el: ElementRef) {}
+
         ngOnInit() {
           calls.push(`MyDir.ngOnInit: ${this.el.nativeElement.tagName}`);
         }
@@ -328,7 +352,7 @@ describe('directives', () => {
         // one `class`, one `attribute` and one other binding.
         template: `
           <div class="a" style="font-size: 10px;" [disabled]="true" [test]="test"></div>
-        `
+        `,
       })
       class MyComp {
         test = '';
@@ -346,11 +370,13 @@ describe('directives', () => {
   describe('inputs', () => {
     it('should allow directive inputs (as a prop binding) on <ng-template>', () => {
       let dirInstance: WithInput;
+
       @Directive({selector: '[dir]'})
       class WithInput {
         constructor() {
           dirInstance = this;
         }
+
         @Input() dir: string = '';
       }
 
@@ -371,11 +397,13 @@ describe('directives', () => {
 
     it('should allow directive inputs (as an interpolated prop) on <ng-template>', () => {
       let dirInstance: WithInput;
+
       @Directive({selector: '[dir]'})
       class WithInput {
         constructor() {
           dirInstance = this;
         }
+
         @Input() dir: string = '';
       }
 
@@ -397,11 +425,13 @@ describe('directives', () => {
     it('should allow directive inputs (as an interpolated prop) on <ng-template> with structural directives',
        () => {
          let dirInstance: WithInput;
+
          @Directive({selector: '[dir]'})
          class WithInput {
            constructor() {
              dirInstance = this;
            }
+
            @Input() dir: string = '';
          }
 
@@ -428,6 +458,7 @@ describe('directives', () => {
         constructor() {
           dirInstances.push(this);
         }
+
         @Input() dirOf!: number[];
         @Input() dirUnboundInput: any;
       }
@@ -472,6 +503,7 @@ describe('directives', () => {
         constructor() {
           dirInstances.push(this);
         }
+
         @Input() dirOf!: number[];
         @Input() title: any;
       }
@@ -534,7 +566,7 @@ describe('directives', () => {
        () => {
          @Directive({
            selector: '[dir]',
-           inputs: [{name: 'plainInput'}, {name: 'aliasedInput', alias: 'alias'}]
+           inputs: [{name: 'plainInput'}, {name: 'aliasedInput', alias: 'alias'}],
          })
          class Dir {
            plainInput: number|undefined;
@@ -560,7 +592,7 @@ describe('directives', () => {
     it('should transform incoming input values', () => {
       @Directive({selector: '[dir]'})
       class Dir {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({template: '<div dir [value]="assignedValue"></div>'})
@@ -584,7 +616,7 @@ describe('directives', () => {
     it('should transform incoming input values when declared through the `inputs` array', () => {
       @Directive({
         selector: '[dir]',
-        inputs: [{name: 'value', transform: (value: string) => value ? 1 : 0}]
+        inputs: [{name: 'value', transform: (value: string) => (value ? 1 : 0)}],
       })
       class Dir {
         value = -1;
@@ -611,7 +643,7 @@ describe('directives', () => {
     it('should transform incoming static input values', () => {
       @Directive({selector: '[dir]'})
       class Dir {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({template: '<div dir value="staticValue"></div>'})
@@ -629,7 +661,7 @@ describe('directives', () => {
     it('should transform incoming values for aliased inputs', () => {
       @Directive({selector: '[dir]'})
       class Dir {
-        @Input({alias: 'valueAlias', transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({alias: 'valueAlias', transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({template: '<div dir [valueAlias]="assignedValue"></div>'})
@@ -653,7 +685,7 @@ describe('directives', () => {
     it('should transform incoming inherited input values', () => {
       @Directive()
       class Parent {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Directive({selector: '[dir]'})
@@ -681,12 +713,12 @@ describe('directives', () => {
     it('should transform aliased inputs coming from host directives', () => {
       @Directive({standalone: true})
       class HostDir {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Directive({
         selector: '[dir]',
-        hostDirectives: [{directive: HostDir, inputs: ['value: valueAlias']}]
+        hostDirectives: [{directive: HostDir, inputs: ['value: valueAlias']}],
       })
       class Dir {
       }
@@ -714,7 +746,7 @@ describe('directives', () => {
 
       @Directive({selector: '[dir]'})
       class Dir implements OnChanges {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
 
         ngOnChanges(changes: SimpleChanges): void {
           if (changes.value) {
@@ -733,15 +765,16 @@ describe('directives', () => {
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
-      expect(trackedChanges).toEqual([jasmine.objectContaining(
-          {previousValue: undefined, currentValue: 0})]);
+      expect(trackedChanges).toEqual([
+        jasmine.objectContaining({previousValue: undefined, currentValue: 0}),
+      ]);
 
       fixture.componentInstance.assignedValue = 'hello';
       fixture.detectChanges();
 
       expect(trackedChanges).toEqual([
         jasmine.objectContaining({previousValue: undefined, currentValue: 0}),
-        jasmine.objectContaining({previousValue: 0, currentValue: 1})
+        jasmine.objectContaining({previousValue: 0, currentValue: 1}),
       ]);
     });
 
@@ -773,7 +806,7 @@ describe('directives', () => {
     it('should transform value assigned using setInput', () => {
       @Component({selector: 'comp', template: ''})
       class Comp {
-        @Input({transform: (value: string) => value ? 1 : 0}) value = -1;
+        @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({template: '<ng-container #location/>'})
@@ -793,6 +826,243 @@ describe('directives', () => {
       ref.setInput('value', 'hello');
       expect(ref.instance.value).toBe(1);
     });
+
+    it('should transform incoming input values using transform functions', () => {
+      @Directive({selector: '[dir]'})
+      class Dir {
+        @Input({transform: [(value: string) => (value ? 1 : 0), (value: number) => value > 0]})
+        value = true;
+      }
+
+      @Component({template: '<div dir [value]="assignedValue"></div>'})
+      class TestComp {
+        @ViewChild(Dir) dir!: Dir;
+        assignedValue = '';
+      }
+
+      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+      const fixture = TestBed.createComponent(TestComp);
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.dir.value).toBe(false);
+
+      fixture.componentInstance.assignedValue = 'hello';
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.dir.value).toBe(true);
+    });
+
+    // it('should transform incoming input values when declared through the `inputs` array', () => {
+    //   @Directive({
+    //     selector: '[dir]',
+    //     inputs: [{name: 'value', transform: (value: string) => (value ? 1 : 0)}],
+    //   })
+    //   class Dir {
+    //     value = -1;
+    //   }
+    //
+    //   @Component({template: '<div dir [value]="assignedValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //     assignedValue = '';
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(0);
+    //
+    //   fixture.componentInstance.assignedValue = 'hello';
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(1);
+    // });
+    //
+    // it('should transform incoming static input values', () => {
+    //   @Directive({selector: '[dir]'})
+    //   class Dir {
+    //     @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //   }
+    //
+    //   @Component({template: '<div dir value="staticValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(1);
+    // });
+    //
+    // it('should transform incoming values for aliased inputs', () => {
+    //   @Directive({selector: '[dir]'})
+    //   class Dir {
+    //     @Input({alias: 'valueAlias', transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //   }
+    //
+    //   @Component({template: '<div dir [valueAlias]="assignedValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //     assignedValue = '';
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(0);
+    //
+    //   fixture.componentInstance.assignedValue = 'hello';
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(1);
+    // });
+    //
+    // it('should transform incoming inherited input values', () => {
+    //   @Directive()
+    //   class Parent {
+    //     @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //   }
+    //
+    //   @Directive({selector: '[dir]'})
+    //   class Dir extends Parent {}
+    //
+    //   @Component({template: '<div dir [value]="assignedValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //     assignedValue = '';
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(0);
+    //
+    //   fixture.componentInstance.assignedValue = 'hello';
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.dir.value).toBe(1);
+    // });
+    //
+    // it('should transform aliased inputs coming from host directives', () => {
+    //   @Directive({standalone: true})
+    //   class HostDir {
+    //     @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //   }
+    //
+    //   @Directive({
+    //     selector: '[dir]',
+    //     hostDirectives: [{directive: HostDir, inputs: ['value: valueAlias']}],
+    //   })
+    //   class Dir {}
+    //
+    //   @Component({template: '<div dir [valueAlias]="assignedValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(HostDir) hostDir!: HostDir;
+    //     assignedValue = '';
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.hostDir.value).toBe(0);
+    //
+    //   fixture.componentInstance.assignedValue = 'hello';
+    //   fixture.detectChanges();
+    //
+    //   expect(fixture.componentInstance.hostDir.value).toBe(1);
+    // });
+    //
+    // it('should use the transformed input values in ngOnChanges', () => {
+    //   const trackedChanges: SimpleChange[] = [];
+    //
+    //   @Directive({selector: '[dir]'})
+    //   class Dir implements OnChanges {
+    //     @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //
+    //     ngOnChanges(changes: SimpleChanges): void {
+    //       if (changes.value) {
+    //         trackedChanges.push(changes.value);
+    //       }
+    //     }
+    //   }
+    //
+    //   @Component({template: '<div dir [value]="assignedValue"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //     assignedValue = '';
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(trackedChanges).toEqual([
+    //     jasmine.objectContaining({previousValue: undefined, currentValue: 0}),
+    //   ]);
+    //
+    //   fixture.componentInstance.assignedValue = 'hello';
+    //   fixture.detectChanges();
+    //
+    //   expect(trackedChanges).toEqual([
+    //     jasmine.objectContaining({previousValue: undefined, currentValue: 0}),
+    //     jasmine.objectContaining({previousValue: 0, currentValue: 1}),
+    //   ]);
+    // });
+    //
+    // it('should invoke the transform function with the directive instance as the context', () => {
+    //   let instance: Dir | undefined;
+    //
+    //   function transform(this: Dir, _value: string) {
+    //     instance = this;
+    //     return 0;
+    //   }
+    //
+    //   @Directive({selector: '[dir]'})
+    //   class Dir {
+    //     @Input({transform}) value: any;
+    //   }
+    //
+    //   @Component({template: '<div dir value="foo"></div>'})
+    //   class TestComp {
+    //     @ViewChild(Dir) dir!: Dir;
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Dir]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   expect(instance).toBe(fixture.componentInstance.dir);
+    // });
+    //
+    // it('should transform value assigned using setInput', () => {
+    //   @Component({selector: 'comp', template: ''})
+    //   class Comp {
+    //     @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
+    //   }
+    //
+    //   @Component({template: '<ng-container #location/>'})
+    //   class TestComp {
+    //     @ViewChild('location', {read: ViewContainerRef}) vcr!: ViewContainerRef;
+    //   }
+    //
+    //   TestBed.configureTestingModule({declarations: [TestComp, Comp]});
+    //   const fixture = TestBed.createComponent(TestComp);
+    //   fixture.detectChanges();
+    //
+    //   const ref = fixture.componentInstance.vcr.createComponent(Comp);
+    //
+    //   ref.setInput('value', '');
+    //   expect(ref.instance.value).toBe(0);
+    //
+    //   ref.setInput('value', 'hello');
+    //   expect(ref.instance.value).toBe(1);
+    // });
   });
 
   describe('outputs', () => {
@@ -822,10 +1092,9 @@ describe('directives', () => {
 
     it('should allow outputs of directive on ng-container', () => {
       @Component({
-        template: `
-          <ng-container (out)="value = true">
-            <span>Hello</span>
-          </ng-container>`
+        template: ` <ng-container (out)="value = true">
+          <span>Hello</span>
+        </ng-container>`,
       })
       class TestComp {
         value = false;
@@ -940,8 +1209,9 @@ describe('directives', () => {
 
     it('should allow setting directive `title` input with `[title]="value1"` and attribute with `attr.title="{{value2}}"`',
        () => {
-         @Component(
-             {template: `<div dir-with-title [title]="value1" attr.title="{{value2}}"></div>`})
+         @Component({
+           template: `<div dir-with-title [title]="value1" attr.title="{{ value2 }}"></div>`,
+         })
          class App {
            value1 = 'a';
            value2 = 'b';
@@ -962,7 +1232,7 @@ describe('directives', () => {
 
     it('should allow setting directive `title` input with `title="{{value}}"` and a "attr.title" attribute with `attr.title="test"`',
        () => {
-         @Component({template: `<div dir-with-title title="{{value}}" attr.title="test"></div>`})
+         @Component({template: `<div dir-with-title title="{{ value }}" attr.title="test"></div>`})
          class App {
            value = 'a';
          }
@@ -983,8 +1253,9 @@ describe('directives', () => {
 
     it('should allow setting directive `title` input with `title="{{value1}}"` and attribute with `[attr.title]="value2"`',
        () => {
-         @Component(
-             {template: `<div dir-with-title title="{{value1}}" [attr.title]="value2"></div>`})
+         @Component({
+           template: `<div dir-with-title title="{{ value1 }}" [attr.title]="value2"></div>`,
+         })
          class App {
            value1 = 'a';
            value2 = 'b';
@@ -1005,8 +1276,9 @@ describe('directives', () => {
 
     it('should allow setting directive `title` input with `title="{{value1}}"` and attribute with `attr.title="{{value2}}"`',
        () => {
-         @Component(
-             {template: `<div dir-with-title title="{{value1}}" attr.title="{{value2}}"></div>`})
+         @Component({
+           template: `<div dir-with-title title="{{ value1 }}" attr.title="{{ value2 }}"></div>`,
+         })
          class App {
            value1 = 'a';
            value2 = 'b';
@@ -1027,7 +1299,7 @@ describe('directives', () => {
 
     it('should set the directive input only, shadowing the title property on the div, for `title="{{value}}"`',
        () => {
-         @Component({template: `<div dir-with-title title="{{value}}"></div>`})
+         @Component({template: `<div dir-with-title title="{{ value }}"></div>`})
          class App {
            value = 'a';
          }
@@ -1047,7 +1319,7 @@ describe('directives', () => {
 
     it('should set the title attribute only, not directive input, for `attr.title="{{value}}"`',
        () => {
-         @Component({template: `<div dir-with-title attr.title="{{value}}"></div>`})
+         @Component({template: `<div dir-with-title attr.title="{{ value }}"></div>`})
          class App {
            value = 'a';
          }
@@ -1089,11 +1361,13 @@ describe('directives', () => {
   describe('directives with the same selector', () => {
     it('should process Directives from `declarations` list after imported ones', () => {
       const log: string[] = [];
+
       @Directive({selector: '[dir]'})
       class DirectiveA {
         constructor() {
           log.push('DirectiveA.constructor');
         }
+
         ngOnInit() {
           log.push('DirectiveA.ngOnInit');
         }
@@ -1111,6 +1385,7 @@ describe('directives', () => {
         constructor() {
           log.push('DirectiveB.constructor');
         }
+
         ngOnInit() {
           log.push('DirectiveB.ngOnInit');
         }
@@ -1131,18 +1406,22 @@ describe('directives', () => {
       fixture.detectChanges();
 
       expect(log).toEqual([
-        'DirectiveA.constructor', 'DirectiveB.constructor', 'DirectiveA.ngOnInit',
-        'DirectiveB.ngOnInit'
+        'DirectiveA.constructor',
+        'DirectiveB.constructor',
+        'DirectiveA.ngOnInit',
+        'DirectiveB.ngOnInit',
       ]);
     });
 
     it('should respect imported module order', () => {
       const log: string[] = [];
+
       @Directive({selector: '[dir]'})
       class DirectiveA {
         constructor() {
           log.push('DirectiveA.constructor');
         }
+
         ngOnInit() {
           log.push('DirectiveA.ngOnInit');
         }
@@ -1160,6 +1439,7 @@ describe('directives', () => {
         constructor() {
           log.push('DirectiveB.constructor');
         }
+
         ngOnInit() {
           log.push('DirectiveB.ngOnInit');
         }
@@ -1187,8 +1467,10 @@ describe('directives', () => {
       fixture.detectChanges();
 
       expect(log).toEqual([
-        'DirectiveA.constructor', 'DirectiveB.constructor', 'DirectiveA.ngOnInit',
-        'DirectiveB.ngOnInit'
+        'DirectiveA.constructor',
+        'DirectiveB.constructor',
+        'DirectiveA.ngOnInit',
+        'DirectiveB.ngOnInit',
       ]);
     });
   });

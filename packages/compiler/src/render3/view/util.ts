@@ -170,7 +170,7 @@ export function conditionallyCreateDirectiveBindingLiteral(
     map: Record<string, string|{
       classPropertyName: string;
       bindingPropertyName: string;
-      transformFunction: o.Expression|null;
+      transformFunctions: o.Expression[]|null;
     }>, keepDeclared?: boolean): o.Expression|null {
   const keys = Object.getOwnPropertyNames(map);
 

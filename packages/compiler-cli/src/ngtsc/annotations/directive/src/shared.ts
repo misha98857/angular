@@ -491,7 +491,7 @@ function extractQueriesFromDecorator(
     reflector: ReflectionHost,
     evaluator: PartialEvaluator,
     isCore: boolean,
-    ): {content: R3QueryMetadata[]; view: R3QueryMetadata[];} {
+    ): {content: R3QueryMetadata[]; view: R3QueryMetadata[]} {
   const content: R3QueryMetadata[] = [], view: R3QueryMetadata[] = [];
   if (!ts.isObjectLiteralExpression(queryData)) {
     throw new FatalDiagnosticError(
@@ -775,7 +775,7 @@ function parseInputsArray(
       const name = value.get('name');
       const alias = value.get('alias');
       const required = value.get('required');
-      let transform: InputTransform|null = null;
+      let transform: InputTransform[]|null = null;
 
       if (typeof name !== 'string') {
         throw createValueHasWrongTypeError(
@@ -787,16 +787,24 @@ function parseInputsArray(
 
       if (value.has('transform')) {
         const transformValue = value.get('transform');
+        const transformValues = Array.isArray(transformValue) ? transformValue : [transformValue];
+        let transform: InputTransform[] = [];
 
-        if (!(transformValue instanceof DynamicValue) && !(transformValue instanceof Reference)) {
-          throw createValueHasWrongTypeError(
-              inputsField,
-              transformValue,
-              `Transform of value at position ${i} of @Directive.inputs array must be a function`,
-          );
-        }
+        transformValues.forEach((transformValue) => {
+          if (!(transformValue instanceof DynamicValue) && !(transformValue instanceof Reference)) {
+            throw createValueHasWrongTypeError(
+                inputsField,
+                transformValues,
+                `Transform of value at position ${
+                    i} of @Directive.inputs array must be a function or array of functions`,
+            );
+          }
 
-        transform = parseInputTransformFunction(clazz, name, transformValue, reflector, refEmitter);
+          transform = [
+            ...transform,
+            parseInputTransformFunction(clazz, name, transformValue, reflector, refEmitter),
+          ];
+        });
       }
 
       inputs[name] = {

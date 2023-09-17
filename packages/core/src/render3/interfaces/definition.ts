@@ -109,14 +109,14 @@ export interface DirectiveDef<T> {
    * Note: the private names are used for the keys, rather than the public ones, because public
    * names can be re-aliased in host directives which would invalidate the lookup.
    */
-  readonly inputTransforms: {[classPropertyName: string]: InputTransformFunction}|null;
+  readonly inputTransforms: {[classPropertyName: string]: InputTransformFunction[]}|null;
 
   /**
    * Contains the raw input information produced by the compiler. Can be
    * used to do further processing after the `inputs` have been inverted.
    */
   readonly inputConfig:
-      {[classPropertyName: string]: string|[string, string, InputTransformFunction?]};
+      {[classPropertyName: string]: string|[string, string, InputTransformFunction[]?]};
 
   /**
    * @deprecated This is only here because `NgOnChanges` incorrectly uses declared name instead of

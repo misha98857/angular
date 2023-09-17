@@ -832,7 +832,7 @@ export interface Input {
   /**
    * Function with which to transform the input value before assigning it to the directive instance.
    */
-  transform?: (value: any) => any | ((value: any) => any)[];
+  transform?: ((value: any) => any | ((value: any) => any))[];
 }
 
 /**

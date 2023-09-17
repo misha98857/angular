@@ -113,7 +113,7 @@ function addFeatures(
     features.push(o.importExpr(R3.ProvidersFeature).callFn(args));
   }
   for (const key of inputKeys) {
-    if (meta.inputs[key].transformFunction !== null) {
+    if (meta.inputs[key].transformFunctions !== null) {
       features.push(o.importExpr(R3.InputTransformsFeatureFeature));
       break;
     }
